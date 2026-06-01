@@ -2,13 +2,15 @@
   "name": "simple-application",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "build": "tsc",
-    "start:dev": "tsx watch src/index.ts",
+    "start:dev": "nodemon --exec tsx src/app.ts",
     "test:e2e": "jest --config jest.config.e2e.js",
     "test:unit": "jest --config jest.config.unit.js",
     "test:full": "npm run test:unit && npm run test:e2e",
+    "generate": "npx drizzle-kit generate",
+    "migration:run": "npx drizzle-kit migrate",
     "prepare": "husky"
   },
   "keywords": [],
@@ -26,7 +28,10 @@
     "drizzle-kit": "^0.31.10",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
+    "nodemon": "^3.1.14",
     "ts-jest": "^29.4.11",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.22.4"
   },
   "dependencies": {

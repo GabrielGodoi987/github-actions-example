@@ -1,208 +1,398 @@
 export const swaggerSpec = {
-  openapi: '3.0.0',
+  openapi: "3.0.0",
   info: {
-    title: 'Simple Application API',
-    description: 'API for user management and posts with JWT authentication',
-    version: '1.0.0',
+    title: "Simple Application API",
+    description: "API for user management and posts with JWT authentication",
+    version: "1.0.0",
   },
-  servers: [{ url: '/', description: 'Local server' }],
+  servers: [{ url: "/", description: "Local server" }],
   components: {
     securitySchemes: {
       bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
       },
     },
     schemas: {
       User: {
-        type: 'object',
+        type: "object",
         properties: {
-          id: { type: 'string', format: 'uuid' },
-          name: { type: 'string' },
-          email: { type: 'string', format: 'email' },
-          createdAt: { type: 'string', format: 'date-time' },
+          id: { type: "string", format: "uuid" },
+          name: { type: "string" },
+          email: { type: "string", format: "email" },
+          createdAt: { type: "string", format: "date-time" },
         },
       },
       CreateUserInput: {
-        type: 'object',
-        required: ['name', 'email', 'password'],
+        type: "object",
+        required: ["name", "email", "password"],
         properties: {
-          name: { type: 'string' },
-          email: { type: 'string', format: 'email' },
-          password: { type: 'string', minLength: 8 },
+          name: { type: "string" },
+          email: { type: "string", format: "email" },
+          password: { type: "string", minLength: 8 },
         },
       },
       UpdateUserInput: {
-        type: 'object',
+        type: "object",
         properties: {
-          name: { type: 'string' },
-          email: { type: 'string', format: 'email' },
+          name: { type: "string" },
+          email: { type: "string", format: "email" },
         },
       },
       Post: {
-        type: 'object',
+        type: "object",
         properties: {
-          id: { type: 'string', format: 'uuid' },
-          title: { type: 'string' },
-          content: { type: 'string' },
-          userId: { type: 'string', format: 'uuid' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
+          id: { type: "string", format: "uuid" },
+          title: { type: "string" },
+          content: { type: "string" },
+          userId: { type: "string", format: "uuid" },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" },
         },
       },
       CreatePostInput: {
-        type: 'object',
-        required: ['title', 'content'],
+        type: "object",
+        required: ["title", "content"],
         properties: {
-          title: { type: 'string', minLength: 5 },
-          content: { type: 'string', minLength: 20 },
+          title: { type: "string", minLength: 5 },
+          content: { type: "string", minLength: 20 },
         },
       },
       UpdatePostInput: {
-        type: 'object',
+        type: "object",
         properties: {
-          title: { type: 'string', minLength: 5 },
-          content: { type: 'string', minLength: 20 },
+          title: { type: "string", minLength: 5 },
+          content: { type: "string", minLength: 20 },
         },
       },
       LoginInput: {
-        type: 'object',
-        required: ['email', 'password'],
+        type: "object",
+        required: ["email", "password"],
         properties: {
-          email: { type: 'string', format: 'email' },
-          password: { type: 'string' },
+          email: { type: "string", format: "email" },
+          password: { type: "string" },
         },
       },
       LoginResponse: {
-        type: 'object',
+        type: "object",
         properties: {
-          token: { type: 'string' },
+          token: { type: "string" },
         },
       },
       Error: {
-        type: 'object',
+        type: "object",
         properties: {
-          error: { type: 'string' },
+          error: { type: "string" },
         },
       },
     },
   },
   paths: {
-    '/auth/login': {
+    "/auth/login": {
       post: {
-        tags: ['Auth'],
-        summary: 'Authenticate user and return JWT token',
+        tags: ["Auth"],
+        summary: "Authenticate user and return JWT token",
         requestBody: {
           required: true,
-          content: { 'application/json': { schema: { $ref: '#/components/schemas/LoginInput' } } },
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/LoginInput" },
+            },
+          },
         },
         responses: {
-          '200': { description: 'Login successful', content: { 'application/json': { schema: { $ref: '#/components/schemas/LoginResponse' } } } },
-          '400': { description: 'Validation error', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
-          '401': { description: 'Invalid credentials', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          "200": {
+            description: "Login successful",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/LoginResponse" },
+              },
+            },
+          },
+          "400": {
+            description: "Validation error",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
+          "401": {
+            description: "Invalid credentials",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
         },
       },
     },
-    '/users': {
+    "/users": {
       post: {
-        tags: ['Users'],
-        summary: 'Create a new user',
+        tags: ["Users"],
+        summary: "Create a new user",
         requestBody: {
           required: true,
-          content: { 'application/json': { schema: { $ref: '#/components/schemas/CreateUserInput' } } },
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/CreateUserInput" },
+            },
+          },
         },
         responses: {
-          '201': { description: 'User created', content: { 'application/json': { schema: { $ref: '#/components/schemas/User' } } } },
-          '400': { description: 'Validation error', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
-          '409': { description: 'Email already exists', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          "201": {
+            description: "User created",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/User" },
+              },
+            },
+          },
+          "400": {
+            description: "Validation error",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
+          "409": {
+            description: "Email already exists",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
         },
       },
     },
-    '/users/{id}': {
+    "/users/{id}": {
       patch: {
-        tags: ['Users'],
-        summary: 'Update user name or email',
+        tags: ["Users"],
+        summary: "Update user name or email",
         parameters: [
-          { name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } },
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string", format: "uuid" },
+          },
         ],
         requestBody: {
-          content: { 'application/json': { schema: { $ref: '#/components/schemas/UpdateUserInput' } } },
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/UpdateUserInput" },
+            },
+          },
         },
         responses: {
-          '200': { description: 'User updated', content: { 'application/json': { schema: { $ref: '#/components/schemas/User' } } } },
-          '404': { description: 'User not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          "200": {
+            description: "User updated",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/User" },
+              },
+            },
+          },
+          "404": {
+            description: "User not found",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
         },
       },
     },
-    '/posts': {
+    "/posts": {
       post: {
-        tags: ['Posts'],
-        summary: 'Create a new post',
+        tags: ["Posts"],
+        summary: "Create a new post",
         security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
-          content: { 'application/json': { schema: { $ref: '#/components/schemas/CreatePostInput' } } },
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/CreatePostInput" },
+            },
+          },
         },
         responses: {
-          '201': { description: 'Post created', content: { 'application/json': { schema: { $ref: '#/components/schemas/Post' } } } },
-          '400': { description: 'Validation error', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
-          '401': { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          "201": {
+            description: "Post created",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Post" },
+              },
+            },
+          },
+          "400": {
+            description: "Validation error",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
+          "401": {
+            description: "Unauthorized",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
         },
       },
       get: {
-        tags: ['Posts'],
-        summary: 'List all posts',
+        tags: ["Posts"],
+        summary: "List all posts",
         security: [{ bearerAuth: [] }],
         responses: {
-          '200': { description: 'List of posts', content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Post' } } } } },
-          '401': { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          "200": {
+            description: "List of posts",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Post" },
+                },
+              },
+            },
+          },
+          "401": {
+            description: "Unauthorized",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
         },
       },
     },
-    '/posts/{id}': {
+    "/posts/{id}": {
       get: {
-        tags: ['Posts'],
-        summary: 'Get a post by ID',
+        tags: ["Posts"],
+        summary: "Get a post by ID",
         security: [{ bearerAuth: [] }],
         parameters: [
-          { name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } },
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string", format: "uuid" },
+          },
         ],
         responses: {
-          '200': { description: 'Post found', content: { 'application/json': { schema: { $ref: '#/components/schemas/Post' } } } },
-          '401': { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
-          '404': { description: 'Post not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          "200": {
+            description: "Post found",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Post" },
+              },
+            },
+          },
+          "401": {
+            description: "Unauthorized",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
+          "404": {
+            description: "Post not found",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
         },
       },
       patch: {
-        tags: ['Posts'],
-        summary: 'Update a post',
+        tags: ["Posts"],
+        summary: "Update a post",
         security: [{ bearerAuth: [] }],
         parameters: [
-          { name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } },
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string", format: "uuid" },
+          },
         ],
         requestBody: {
-          content: { 'application/json': { schema: { $ref: '#/components/schemas/UpdatePostInput' } } },
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/UpdatePostInput" },
+            },
+          },
         },
         responses: {
-          '200': { description: 'Post updated', content: { 'application/json': { schema: { $ref: '#/components/schemas/Post' } } } },
-          '401': { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
-          '404': { description: 'Post not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          "200": {
+            description: "Post updated",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Post" },
+              },
+            },
+          },
+          "401": {
+            description: "Unauthorized",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
+          "404": {
+            description: "Post not found",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
         },
       },
       delete: {
-        tags: ['Posts'],
-        summary: 'Delete a post',
+        tags: ["Posts"],
+        summary: "Delete a post",
         security: [{ bearerAuth: [] }],
         parameters: [
-          { name: 'id', in: 'path', required: true, schema: { type: 'string', format: 'uuid' } },
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string", format: "uuid" },
+          },
         ],
         responses: {
-          '204': { description: 'Post deleted, no content' },
-          '401': { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
-          '404': { description: 'Post not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          "204": { description: "Post deleted, no content" },
+          "401": {
+            description: "Unauthorized",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
+          "404": {
+            description: "Post not found",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+              },
+            },
+          },
         },
       },
     },
   },
-}
+};

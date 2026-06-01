@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
     "target": "ES2022",
-    "module": "nodenext",
     "lib": ["ES2022"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "strict": true,
+    "ignoreDeprecations": "6.0",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,8 +15,8 @@
     "declaration": true,
     "declarationMap": true,
     "isolatedModules": true,
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "tests"]
+  "include": ["src", "tests"],
+  "exclude": ["node_modules", "dist"]
 }

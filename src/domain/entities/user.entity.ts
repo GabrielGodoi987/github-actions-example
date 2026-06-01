@@ -1,12 +1,13 @@
-import { v4 } from 'uuid';
-import { EmailValueObject } from '../value-objects/email.value-object';
-import { PostEntity } from './post.entity';
+import { v4 } from "uuid";
+import { EmailValueObject } from "../value-objects/email.value-object";
+import { PasswordValueObject } from "../value-objects/password.value-object";
+import { PostEntity } from "./post.entity";
 
-export class UserEntity{
+export class UserEntity {
   private id: string;
-  private name: string
+  private name: string;
   private email: EmailValueObject;
-  private password: string;
+  private password: PasswordValueObject;
   private createdAt: Date;
   private updatedAt: Date;
   private posts: PostEntity[];
@@ -15,15 +16,15 @@ export class UserEntity{
     name: string,
     email: string,
     password: string,
-    createdAt: Date,
-    updatedAt: Date
+    createdAt?: Date,
+    updatedAt?: Date,
   ) {
     this.id = v4();
     this.name = name;
     this.email = new EmailValueObject(email);
-    this.password = password;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.password = new PasswordValueObject(password);
+    this.createdAt = createdAt || new Date();
+    this.updatedAt = updatedAt || new Date();
     this.posts = [];
   }
 
@@ -52,11 +53,11 @@ export class UserEntity{
   }
 
   getPassword(): string {
-    return this.password;
+    return this.password.getPassword();
   }
 
   setPassword(password: string): void {
-    this.password = password;
+    this.password = new PasswordValueObject(password);
   }
 
   getCreatedAt(): Date {

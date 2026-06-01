@@ -18,5 +18,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm install
-      - name: Run tests
-        run: npm test
+      - name: Run unit tests
+        run: npm run test:unit
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+      - name: Run all tests
+        run: npm run test:full

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { CreateUserUseCase } from '../../application/user/create-user.use-case'
 import { UpdateUserUseCase } from '../../application/user/update-user.use-case'
 
@@ -8,7 +8,7 @@ export class UserController {
     private updateUserUseCase: UpdateUserUseCase,
   ) {}
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
+  async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, email, password } = req.body
 
@@ -28,7 +28,7 @@ export class UserController {
     }
   }
 
-  update = async (req: Request, res: Response, next: NextFunction) => {
+  async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id as string
       const { name, email } = req.body

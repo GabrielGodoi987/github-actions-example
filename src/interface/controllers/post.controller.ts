@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { CreatePostUseCase } from '../../application/posts/create-post.use-case'
+import { DeletePostUseCase } from '../../application/posts/delete-post.use-case'
 import { FindAllPostsUseCase } from '../../application/posts/findall-posts.use-case'
 import { FindOnePostUseCase } from '../../application/posts/findone-post.use-case'
 import { UpdatePostUseCase } from '../../application/posts/update-post.use-case'
-import { DeletePostUseCase } from '../../application/posts/delete-post.use-case'
 
 export class PostController {
   constructor(
@@ -14,10 +14,10 @@ export class PostController {
     private deletePostUseCase: DeletePostUseCase,
   ) {}
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
+  async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { title, content } = req.body
-      const userId = req.user!.userId
+      const userId = req.user!.sub
 
       if (!title || !content) {
         return res.status(400).json({ error: 'Title and content are required' })
@@ -52,7 +52,7 @@ export class PostController {
     }
   }
 
-  findOne = async (req: Request, res: Response, next: NextFunction) => {
+ async findOne(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id as string
       const post = await this.findOnePostUseCase.execute(id)
@@ -69,7 +69,7 @@ export class PostController {
     }
   }
 
-  update = async (req: Request, res: Response, next: NextFunction) => {
+   async update (req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id as string
       const { title, content } = req.body
@@ -85,7 +85,7 @@ export class PostController {
     }
   }
 
-  delete = async (req: Request, res: Response, next: NextFunction) => {
+  async delete(req: Request, res: Response, next: NextFunction){
     try {
       const id = req.params.id as string
       await this.deletePostUseCase.execute(id)

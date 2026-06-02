@@ -1,13 +1,14 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../db";
-import { userSchema } from "../../../db/schema";
+import { usersSchema } from "../../../db/schema";
 import { UserEntity } from "../../../domain/entities/user.entity";
 import { UserRepository } from "../../../domain/repositories/user-repository";
+import { UserMapper } from "../mappers/user.mapper";
 
 export class DrizzleUserRepository implements UserRepository {
   async create(user: UserEntity): Promise<UserEntity> {
     const [row] = await db
-      .insert(userSchema)
+      .insert(usersSchema)
       .values({
         id: user.getId(),
         name: user.getName(),
@@ -18,28 +19,28 @@ export class DrizzleUserRepository implements UserRepository {
       })
       .returning();
 
-    return this.toEntity(row);
+    return UserMapper.toEntity(row);
   }
 
   async findById(id: string): Promise<UserEntity | null> {
     const [row] = await db
       .select()
-      .from(userSchema)
-      .where(eq(userSchema.id, id));
-    return row ? this.toEntity(row) : null;
+      .from(usersSchema)
+      .where(eq(usersSchema.id, id));
+    return row ? UserMapper.toEntity(row) : null;
   }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
     const [row] = await db
       .select()
-      .from(userSchema)
-      .where(eq(userSchema.email, email));
-    return row ? this.toEntity(row) : null;
+      .from(usersSchema)
+      .where(eq(usersSchema.email, email));
+    return row ? UserMapper.toEntity(row) : null;
   }
 
   async findAll(): Promise<UserEntity[]> {
-    const rows = await db.select().from(userSchema);
-    return rows.map((row) => this.toEntity(row));
+    const rows = await db.select().from(usersSchema);
+    return rows.map((row) => UserMapper.toEntity(row));
   }
 
   async update(
@@ -47,30 +48,18 @@ export class DrizzleUserRepository implements UserRepository {
     data: { name?: string; email?: string },
   ): Promise<UserEntity> {
     const [row] = await db
-      .update(userSchema)
+      .update(usersSchema)
       .set({
         ...data,
         updatedAt: new Date(),
       })
-      .where(eq(userSchema.id, id))
+      .where(eq(usersSchema.id, id))
       .returning();
 
-    return this.toEntity(row);
+    return UserMapper.toEntity(row);
   }
 
   async delete(id: string): Promise<void> {
-    await db.delete(userSchema).where(eq(userSchema.id, id));
-  }
-
-  private toEntity(row: typeof userSchema.$inferSelect): UserEntity {
-    const user = new UserEntity(
-      row.name,
-      row.email,
-      row.password,
-      row.createdAt,
-      row.updatedAt,
-    );
-    user.setId(row.id);
-    return user;
+    await db.delete(usersSchema).where(eq(usersSchema.id, id));
   }
 }

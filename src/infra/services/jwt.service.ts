@@ -1,7 +1,7 @@
 import jwt, { SignOptions } from "jsonwebtoken";
-import { SECRET_KEY } from "../consts/env-variables.consts";
+import { JWT_REFRESH_TOKEN_SECRET } from "../consts/env-variables.consts";
 
-export type JwtPayload = { userId: string; email: string };
+export type JwtPayload = { userName: string; email: string;};
 
 export class JwtService {
   static sign(
@@ -12,7 +12,7 @@ export class JwtService {
     return jwt.sign(payload, SECRET_KEY, signOptions);
   }
 
-  static verify(token: string): JwtPayload {
-    return jwt.verify(token, SECRET_KEY) as JwtPayload;
+  static verify(token: string): JwtPayload & {sub: string; iat: number; } {
+    return jwt.verify(token, JWT_REFRESH_TOKEN_SECRET) as JwtPayload & {sub: string; iat: number; };
   }
 }

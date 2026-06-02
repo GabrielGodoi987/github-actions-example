@@ -8,7 +8,7 @@ config({
 import { errorHandler } from "./infra/middlewares/error-handler.middleware";
 import { swaggerRouter } from "./infra/swagger/swagger.router";
 import { authRouter } from "./router/auth.router";
-import { postRouter } from "./router/post.entity";
+import { postRouter } from "./router/post.router";
 import { userRouter } from "./router/user.router";
 
 import swaggerUi from "swagger-ui-express";
@@ -34,7 +34,9 @@ app.use("/posts", postRouter);
 app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/docs.json", swaggerRouter);
 
-bootStrapApplication().catch((err) => {
-  console.error("Failed to start server", err);
-  process.exit(1);
-});
+if (process.env.NODE_ENV !== "test") {
+  bootStrapApplication().catch((err) => {
+    console.error("Failed to start server", err);
+    process.exit(1);
+  });
+}

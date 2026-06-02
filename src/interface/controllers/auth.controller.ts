@@ -10,7 +10,7 @@ export class AuthController {
     private refreshUseCase: RefreshTokenUseCase,
   ) {}
 
-  login = async (req: Request, res: Response, next: NextFunction) => {
+ async login(req: Request, res: Response, next: NextFunction){
     try {
       const { email, password } = req.body;
 
@@ -27,7 +27,7 @@ export class AuthController {
     }
   };
 
-  refresh = async (req: Request, res: Response, next: NextFunction) => {
+  async refresh(req: Request, res: Response, next: NextFunction) {
     try {
       const { token } = req.body;
 

@@ -1,7 +1,8 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../src/db";
-import { userSchema } from "../../../src/db/schema";
+import { usersSchema } from "../../../src/db/schema";
 import { UserEntity } from "../../../src/domain/entities/user.entity";
+import { HashService } from "../../../src/infra/services/hash.service";
 
 export async function createUserFactory(users?: UserEntity[]) {
   const listOfUsers: UserEntity[] = [...(users || [])];
@@ -21,13 +22,13 @@ export async function createUserFactory(users?: UserEntity[]) {
   }
 
   try {
-    db.transaction(async (trx) => {
-      trx.insert(userSchema).values(
+    await db.transaction(async (trx) => {
+      await trx.insert(usersSchema).values(
         listOfUsers.map((user) => ({
           id: user.getId(),
           name: user.getName(),
           email: user.getEmail(),
-          password: user.getPassword(),
+          password: HashService.hash(user.getPassword()),
           createdAt: user.getCreatedAt(),
           updatedAt: user.getUpdatedAt(),
         })),
@@ -43,7 +44,7 @@ export async function createUserFactory(users?: UserEntity[]) {
 
 export async function deleteUsersFactory() {
   try {
-    await db.delete(userSchema).execute();
+    await db.delete(usersSchema).execute();
   } catch (error) {
     console.error("Error deleting users in factory:", error);
     throw error;
@@ -54,8 +55,8 @@ export async function getUserByEmailFactory(email: string) {
   try {
     const [row] = await db
       .select()
-      .from(userSchema)
-      .where(eq(userSchema.email, email));
+      .from(usersSchema)
+      .where(eq(usersSchema.email, email));
 
     return row;
   } catch (error) {

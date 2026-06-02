@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-export const userSchema = pgTable("users", {
+export const usersSchema = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
@@ -15,7 +15,7 @@ export const postsSchema = pgTable("posts", {
   content: text("content").notNull(),
   userId: uuid("user_id")
     .notNull()
-    .references(() => userSchema.id),
+    .references(() => usersSchema.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
